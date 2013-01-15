@@ -1,0 +1,25 @@
+#! /bin/sh
+#
+# Initscript v 0.1 for mepl Sun Apr 25 21:17:13 MEST 1999
+# "start" print and download all messages; delete memory
+# "stop"  switch the modem into self-employed-mode
+#
+# Author: Frank Holtz <frank@hof-berlin.de>
+
+case "$1" in
+    start)
+	echo "Testing Messagemodem"
+	mepl -s 
+	mepl -d -m &
+	;;
+    stop)
+	echo -n "Initialising Messagemodem: "
+	mepl -i
+	echo
+	;;
+    *)
+	echo "Usage: $0 {start|stop}"
+	exit 1
+esac
+
+exit 0

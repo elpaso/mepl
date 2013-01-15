@@ -1,0 +1,25 @@
+#!/bin/sh
+#Mailscript v0.3 for mepl v0.44
+fname=/tmp/meplmsg
+echo To:$1 >$fname
+echo Subject:$3 >>$fname
+echo "MIME-Version: 1.0" >> $fname
+ case "$2" in
+       *.gsm) 	echo "Content-Type: audio/basic; name=\"$2\"" | sed 's/\(\<.*\.\)gsm/\1au/g'>> $fname
+		echo "Content-Transfer-Encoding: base64" >> $fname
+		echo "" >>$fname
+		toast -d -c $2 | mimencode -b >> $fname
+		;;
+       *.fax) 	echo "Content-Type: image/fax; name=\"$2\"" >> $fname
+		echo "Content-Transfer-Encoding: base64" >> $fname
+		echo "" >>$fname
+		mimencode -b <$2 >> $fname
+		;;
+       *) 	echo "Content-Type: application/data; name=\"$2\"" >> $fname
+		echo "Content-Transfer-Encoding: base64" >> $fname
+		echo "" >>$fname
+		mimencode -b <$2 >> $fname
+		;;
+       esac
+cat $fname | /usr/sbin/sendmail -fSportsterMessagePlus $1
+rm $fname

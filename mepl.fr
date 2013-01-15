@@ -1,0 +1,140 @@
+.\" Sun Mar 28 19:02:04 MEST 1999 <frank@hof-berlin.de>
+.\" french translation <gekhajofour@netinfo.fr>
+.TH MEPL 7 "APRIL 1999" Linux "Version 0.43"
+.SH NAME
+mepl \- Contrôle du mode autonome des modems 3COM/USR
+.SH SYNTAX
+.B mepl [-d] [-f
+.I nom de fichier
+.B ]
+.B [-i] [-m] [-p] [-P
+.I numéro de message
+.B ] [-r] [-s] [-t
+.I répertoire
+.B ]
+.SH DESCRIPTION
+.B mepl
+pilote le mode autonome des modems 3COM/USR et peut envoyer
+les messages vocaux et les fax comme e-mail ou dans un répertoire.
+Les messages vocaux sont en format gsm et peuvent être écoutés avec
+rplay par exemple ou avec tcat (du paquetage gsm) disponible à l'adresse
+"ftp:// ftp.cs.tu-berlin.de /pub /local /kbs /tubmik /gsm-1.0.10.tar.gz".
+Les fax peuvent être visualisés avec par exemple 
+.BR viewfax(1)
+, kfax ou
+.BR gimp(1)
+
+.SH COMPATIBILITÉ
+Ce programme a été testé jusqu'ici sur un modem USRobotics Message Plus
+et devrait pouvoir fonctionner avec les faxmodems vocaux de la firme 3COM.
+Le support des autres modèles n'est pas disponible.
+.LP
+Ce programme a été testé avec le firmware 12.1.25. Avec ce
+firmware a été introduite la possibilité d'écouter les messages vocaux.
+Pour cela il suffit d'actionner les deux boutons du haut-parleur simultanément.
+.BR
+Les programmes suivants sont nécessaires :
+.BR mimencode(1)
+et
+.BR sendmail(8).
+
+.SH OPTIONS
+.IP -d
+Récupère les données de la mémoire du modem et traite les messages 
+selon la configuration dans
+.B /etc/mepl.conf 
+.IP -f
+Donne le nom du fichier temporaire pour sauver les données du modem. par
+défaut, c'est le fichier /tmp/meplmem qui est utilisé.
+.IP -i
+Initialise le modem avec les paramètres donnés. Le mode autonome est activé.
+.IP -m
+Efface la mémoire du modem après récupération.
+.IP -M
+Efface la mémoire sans la récupérer.
+.IP -p
+Affiche une liste des message sauvés ou envoyés par e-mail.
+.IP -P <no>
+Fait entendre un message vocal (1-254 messages vocaux; 0 message d'accueil;
+255 message de mémoire pleine; n nouveaux messages; a tous les messages)
+.IP -r
+Lecture des message du fichier /tmp/meplmem ou du fichier défini par l'option -f.
+.IP -R<nr>
+Chargement du message d'accueil (nr=0) ou du message de mémoire pleine (nr=1)
+.IP -s
+Donne le statut du modem.
+.IP -t
+Les données du modem sont enregistrées dans le répertoire donné après -t,
+sous un nom de fichier qui représente la date et l'heure. On peut l'utiliser
+pour archiver commodément les messages.
+.SH CONFIGURATION
+Le programme est configuré par le fichier
+.B /etc/mepl.conf
+un exemple fichier de configuration est fourni avec le programme.
+Les paramètres sont donnés sous le format suivant :
+.LP 
+<Paramètre>Valeur
+.LP
+Les paramètres suivants sont acceptés :
+.IP c
+La fonction d'interrogation à distance est activée par un code à quatre
+chiffres. Sans mot de passe l'option d'interrogation à distance est
+désactivée. Après composition du mot de passe on peut activer les fonctions
+suivantes :
+.br
+0  Indication du nombre de nouveaux messages.
+.br
+1  Répétition des nouveaux messages depuis le début.
+.br
+2  Écoute du message suivant.
+.IP d
+fichier désignant l'interface modem.
+.IP f
+définit l'action appliquée aux fax. fS sauve le fax dans le répertoire défini par p.
+fM<user> envoie le fax comme e-mail à l'utilisateur <user>. Par exemple fMroot
+envoie tous les fax à root.
+.IP i
+Donne l'identification du fax.
+.IP l
+Définit le fichier de verrouillage du modem.
+.IP m
+Définit le script qui envoie les e-mails. Les paramètres 
+sont : $1=nom d'utilisateur $2=nom de fichier $3=sujet.
+.br
+Le script d'origine est 
+.B /usr/bin/meplmail
+qui est configué pour envoyer les e-mails en tant qu'utilisateur
+"SportsterMessagePlus".
+.IP p
+Définit le répertoire pour enregistrer les messages arrivés.
+.IP r
+Définit le nombre de sonneries avant de prendre la communication.
+.IP R
+Nombre de jours après lesquels l'heure du modem sera resynchronisée à
+l'initialisation du modem. Valeurs possibles : 0-255.
+.IP s
+Durée maximale des messages en secondes. O ne limite pas la durée des
+messages.
+.IP v
+Définit le traitement des messages vocaux. vS sauve le message dans le 
+répertoire défini par p. vM envoie le message par e-mail.
+.br
+Par exemple, "vMroot" envoie tous les messages vocaux par e-mail à root.
+.SH SCRIPT D'INITIALISATION
+À l'installation de mepl le script
+.B /etc/rc.d/init.d/mepl ou /etc/init.d/mepl
+est mis en place. Ce script peut être lancé à l'initialisation de la
+façon habituelle.
+.BR
+Au démarrage du script, une liste de tous les messages arrivés est montrée
+et leur chargement est lancé. Ensuite la mémoire du modem est vidée.
+.BR
+À l'arrêt le modem est remis en mode autonome.
+.SH BUGS
+Veuillez envoyer les messages concernant de nouveaux bugs avec le
+modèle du modem, son identification, et le firmare utilisé (ATI4 et ATI7)
+à bugs@hof-berlin.de
+.br
+La version la plus récente de mepl est disponible à l'adresse
+http://www.hof-berlin.de/mepl .
+

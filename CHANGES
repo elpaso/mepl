@@ -1,0 +1,57 @@
+V0.45	Thu Jun 15 19:45:10 CEST 2000
+	 .it-version from Gianluca Montecchi <g_luca@hotmail.com>
+
+V0.44	Sun Feb 20 13:17:37 CET 2000
+	 Bug from V0.43 in "meplmail" fixed
+	 include <signal.h> from "mepl.c" removed
+	 Installation of "meplinit" removed
+	 	 
+V0.43	Don Nov 25 19:13:58 CET 1999 <frank@hof-berlin.de>
+	 Bug with modem communication fixed (kppp problem)
+	 meplmail changed
+
+V0.42	Thu Jun 24 19:28:08 CEST 1999 <frank@hof-berlin.de>
+	 Echo of modem commands disabled
+	 -R; -h; -v option
+	 Some english corrections from gerard-mcglew@swissonline.ch
+	 French translation and msg.h from Georges Khaznadar <gekhajofour@netinfo.fr>
+	 help text format in msg.h changed
+
+V0.41	Thu May 13 19:06:35 MEST 1999 <frank@hof-berlin.de>
+	 -M option
+	 Initscript
+	 Some problems with modem communication fixed
+	 add status (new/old) to message list
+	 move modem commands to "usrat.h"
+	 "usr.h"
+	 -P option
+
+V0.40	Sun Mar 28 19:02:04 MEST 1999 <frank@hof-berlin.de>
+	 main: better options handling
+	 man-page
+	 print realtime in modemstatus
+	 new format for the message list
+	 variable reset of modemclock (R in mepl.conf)
+	 updconf.c
+	 faster modeminit (-i)
+	 Makefile: variable for configfile
+		   use install command
+	 Meplmail: full path to sendmail
+		   changed user from anrufbeantworter to SportsterMessagePlus
+
+V0.32	Mon Mar 22 17:58:55 MET 1999 <frank@hof-berlin.de>
+	 make mepl compilant with RedHat 5.1
+
+V0.31	Mon Mar  1 17:06:56 MET 1999 <frank@hof-berlin.de>
+	 make de/installde
+	 faxwrite: all faxes are viewable with a faxviewer
+
+V0.3	Mon Jan  4 21:09:27 MET 1999 <frank@hof-berlin.de>
+	 Faxfile has the same format as Phonetools
+
+V0.2	Sun Jan  3 12:04:35 MET 1999 <frank@hof-berlin.de>
+	 Messagetime corrected
+	 Lockfilesupport
+
+V0.1	12/13/98 <frank@hof-berlin.de>
+	 First version of mepl

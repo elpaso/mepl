@@ -1,0 +1,122 @@
+.\" Thu Jun 24 19:28:08 CEST 1999 <frank@hof-berlin.de>
+.TH MEPL 7 "JUN 1999" Linux "Version 0.43"
+.SH NAME
+mepl \- Control of the self\-employed\-mode of 3COM/USR modems
+.SH SYNOPSIS
+.B mepl [-d] [-f
+.I Filename
+.B ]
+.B [-i] [-m] [-p] [-P
+.I Messagenumber
+.B ] [-r] [-s] [-t
+.I Directory
+.B ]
+.SH DESCRIPTION
+.B mepl
+is a program to control the self-employed-mode of 3COM/USR Messagemodems. The 
+incoming messages can be sent as mail or saved into a directory. The faxes 
+can be looked at with
+.BR viewfax(1)
+, kfax or
+.BR gimp(1)
+etc. Voicefiles are saved in gsm-format. rplay or tcat/toast 
+(from the gsm-package available at 
+ftp:// ftp.cs.tu-berlin.de /pub /local /kbs /tubmik /gsm-1.0.10.tar.gz)
+can play these messages. 
+.SH COMPATIBILTY
+This program was tested with a USRobotics Message Plus modem and
+should cooperate with the messagemodems from 3Com. A Support of other
+messagemodems is not available. You need 
+.BR mimencode(1)
+and
+.BR sendmail(8).
+.SH OPTIONS
+.IP -d
+Download the modem memory and handle the messages as it is configured in 
+.B /etc/mepl.conf
+.IP -f
+Filename where modem memory is saved to. Default is /tmp/meplmem
+.IP -i
+Initialize the modem
+.IP -m
+Delete memory after download (-d)
+.IP -M
+Delete memory without download
+.IP -p
+Print a list of all saved/mailed messages
+.IP -P<no>
+Play a voice message (1-254 voicemessage;0 greetingmessage; 255 memory full
+message; n all new messages; a all messages)
+.IP -r
+Read the messages of /tmp/meplmem or the file defined with -f
+.IP -R<no>
+Record the greeting(no=0) or memory full(no=1) message
+.IP -s
+View the modemstatus.
+.IP -t
+The modem memory gets saved in a file within the by -t transferred dirctory.
+The filename consists of date and time. 
+.SH CONFIGURATION
+The progam is configured by the file
+.B /etc/mepl.conf
+. The first
+character of that file is the Option followed by the value:
+.br
+<Option>Value
+.br
+.IP c
+Setup the remote inquiry password (4 digits). If no password is defined the
+dialup retrieval option is disabled. After you have put in the password the 
+following functions are available:
+.br
+0  repeat the acoustic indication of new messages count
+.br
+1  restart the playback of currently played voice messages
+.br
+2  start playing next message
+.IP d
+Modemdevice
+.IP f
+fS saves faxes in the with p submitted directory fM<user> sends the faxes as
+mail to <user> e.g.: "fMroot" sends all faxes to root
+.IP i
+Faxid
+.IP l
+Lockfile for modem
+.IP m
+mailscript $1=username $2=filename $3=Subject
+.br
+The original script is called
+.B /usr/bin/meplmail.
+It is configured to sednd the messages as user
+"SportsterMessagePlus" . 
+.IP p
+Directory for incoming messages
+.IP r
+Number of rings before answering.
+.IP R
+Number of days after which the modemclock shall be reset while initialization
+of the modem. Possible values: 0-255.
+.IP s
+specify the duration (in seconds) of the received voice messages
+0=Do not limit duration of received voice messages.
+.IP v
+vS save the voicemessages in the directory (Option p)
+.br
+vM<user> send the voicemessages as mail to <user>
+.br
+e.g.: vS all messages are saved
+.SH DAS INITSCRIPT
+During the installation of meplthe script
+.B /etc/rc.d/init.d/mepl or /etc/init.d/mepl
+is generated. The script can be integrated to the init. 
+.BR
+While starting the script a list of all new incoming messages is shown
+and their download is initiated. Afterwards, the modem memory is erased.
+.BR
+At the end the modem gets put into the self-employed mode.
+.SH BUGS
+Please send new bugs to bugs@hof-berlin.de. Don't forget to note the 
+model of your modem, its id and the used firmware (ATI4 and ATI7).
+.br
+Latest Version of mepl: http://www.hof-berlin.de/mepl

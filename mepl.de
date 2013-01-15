@@ -1,0 +1,148 @@
+.\" Thu Jun 24 19:28:08 CEST 1999 <frank@hof-berlin.de>
+.TH MEPL 7 "JUN 1999" Linux "Version 0.43"
+.SH NAME
+mepl \- Steuerung des unabhängigen Modus von 3COM/USR Modems
+.SH SYNTAX
+.B mepl [-d] [-f
+.I Dateiname
+.B ]
+.B [-i] [-m] [-p] [-P
+.I Nachricht
+.B ] [-r] [-s] [-t
+.I Verzeichnis
+.B ]
+.SH BESCHREIBUNG
+.B mepl
+steuert den unabhängigen Modus von 3COM/USR Modems und kann die
+eingegangenen Anrufe und Faxe als Mail versenden oder in einem
+Verzeichnis abspeichern. Die Tondaten liegen im gsm-Format vor und
+können z.B. mit rplay oder mit tcat oder toast aus dem gsm-Packet, welches 
+unter "ftp:// ftp.cs.tu-berlin.de /pub /local /kbs /tubmik /gsm-1.0.10.tar.gz"
+zu finden ist, angehört werden. Die Faxe können z.B. mit
+.BR viewfax(1)
+, kfax oder
+.BR gimp(1)
+betrachtet werden.
+
+.SH KOMPATIBILITÄT
+Dieses Programm wurde bis jetzt mit einem USRobotics Message Plus
+getestet und sollte auch mit den Messagemodems der Firma 3COM
+zusammen arbeiten. Eine Unterstützung anderer Modelle ist nicht
+vorgesehen.
+.LP
+Das Programm wurde mit der Firmware 12.1.25 getestet. Mit dieser
+Firmware wurde übrigens eine Abhörmöglichkeit für eingeganene
+Tonnachrichten eingeführt. Dazu müssen nur beide Lautstärketasten
+gleichzeitig betätigt werden.
+.BR
+Folgende Programme werden benötigt:
+.BR mimencode(1)
+und
+.BR sendmail(8).
+
+.SH OPTIONEN
+.IP -d
+Startet den Download des Modemspeichers und bearbeitet die Nachrichten, so wie
+in 
+.B /etc/mepl.conf 
+angegeben.
+.IP -f
+Gibt einen Dateinamen zur Zwischenspeicherung des Modemspeichers an. Ohne 
+diesen Parameter wird die Datei /tmp/meplmem benutzt.
+.IP -i
+Initialisiert das Modem mit den in der Konfigurationsdatei angegebenen 
+Parametern. Der selbständige Modus wird aktiviert.
+.IP -m
+Nach dem Download wird der Modemspeicher gelöscht.
+.IP -M
+Löscht auch ohne Download den Speicher des Modems.
+.IP -p
+Beim Versenden/Speichern der Nachrichten wird eine Liste ausgegeben.
+.IP -P<nr>
+Spielt eine Tonnachricht ab (1-254 Nachricht; 0 Ansage; 255 Speicher
+voll-Ansage; n alle neuen Nachrichten)
+.IP -r
+Die Nachrichten werden erneut aus der Datei /tmp/meplmem oder der bei -f 
+angegebenen erzeugt.
+.IP -R<nr>
+Aufnahme der Ansage(nr=0) oder der Speicher voll Ansage(nr=1)
+.IP -s
+Ausgabe des Modemstatus.
+.IP -t
+In dem mit -t angegebenen Verzeichnis wird der Modemspeicher in einer Datei, 
+dessen Name sich aus Datum und Uhrzeit zusammensetzt, gespeichert. Das kann 
+gut zur Archivierung der Nachrichten eingesetzt werden.
+
+.SH KONFIGURATION
+Das Programm wird über die Datei
+.B /etc/mepl.conf
+konfiguriert. Eine Beispielkonfiguration liegt dem Programm bei. Die 
+Parameter werden in dem folgendem Format übergeben:
+.LP 
+<Parameter>Wert
+.LP
+Folgende Parameter sind möglich:
+.IP c
+Durch die Angabe eines 4-Stelligen Codes wird der Fernabfragefunktion 
+aktiviert. Nach Eingabe des Codes stehen folgende Tasten zur Verfügung:
+.br
+0  Abfrage der Anzahl neu eingegangener Nachrichten
+.br
+1  Wiedergabe neuer Nachrichten
+.br
+2  Wiedergabe der nächsten Nachricht
+.IP d
+Modemdevice
+.IP f
+Wie soll mit eingehenden Faxen verfahren werden. Folgt als nächstes Zeichen 
+ein 'S', so werden die Faxe abgespeichert. Folgt ein 'M' so werden selbige 
+als Mail verschickt. 
+.br
+Bsp: "fS" speichert alle Faxe ab.
+.IP i
+Gibt die Faxkennung an.
+.IP l
+Lockdatei des Modems
+.IP m
+gibt das Script an, welches die Mails verschickt. Folgende Parameter werden 
+übergeben: $1=Empfänger $2=Dateiname $3=Subjekt
+.br
+Das Originalscript heisst
+.B /usr/bin/meplmail
+und ist so ausgelegt, dass es die Nachrichten als Benutzer
+"SportsterMessagePlus" versendet.
+.IP p
+Gibt das Verzeichnis an, in dem die Eingegangenen Nachrichten gespeichert
+werden sollen.
+.IP r
+Gibt die Zahl der Klingelzeichen an, nach der Anrufe entgegen genommen werden 
+sollen.
+.IP R
+Dieser Wert gibt an, nach wievielen Tagen die Modemuhr bei der
+Modeminitialisierung zurückgesetzt werden soll. Mögliche Werte 0-255.
+.IP s
+Maximale Nachrichtenlänge in Sekunden. 0 steht für unbegrenzte
+Aufzeichnungsdauer.
+.IP v
+Wie soll mit eingehenden Sprachnachrichten verfahren werden. Folgt als 
+nächstes Zeichen ein 'S', so werden die Nachrichten abgespeichert. Folgt 
+ein 'M' so werden selbige als Mail verschickt.
+.br
+Bsp: "vMroot" sendet alles per Mail an root
+.SH DAS INITSCRIPT
+Bei der Installation von mepl wurde in das Script
+.B /etc/rc.d/init.d/mepl oder /etc/init.d/mepl
+erstellt. Dieses Script kann auf die übliche Weise in Init eingebunden
+werden. 
+.BR
+Beim Start des Scriptes wird eine Liste aller eingegangenen
+Nachrichten angezeigt und der Download gestartet. Danach wird der Speicher
+des Modems gelöscht.
+.BR
+Beim Stoppen wird das Modem in den selbstständigen Modus gebracht.
+.SH BUGS
+Neue Bugs bitte mit Angabe des Modemmodells,der Modell-ID und der 
+benutzen Firmware (ATI4 und ATI7) an bugs@hof-berlin.de
+.br
+Die neueste Version von mepl ist unter http://www.hof-berlin.de/mepl
+erhältlich.
